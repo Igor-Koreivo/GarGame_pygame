@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
 from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QPushButton
 import sys
+import math
 
 
 class Calculator(QWidget):
@@ -12,13 +12,13 @@ class Calculator(QWidget):
         self.operand_2 = []
 
     def initUI(self):
-        self.setGeometry(300, 300, 225, 380)
+        self.setGeometry(300, 300, 225, 425)
         self.setWindowTitle("Калькулятор")
 
         self.label = QLabel(self)
         self.label.setText('0')
         self.label.resize(225, 95)
-        self.move(0, 0)
+        self.label.move(25, 0)
 
         self.num_1 = QPushButton('1', self)
         self.num_1.resize(50, 50)
@@ -84,12 +84,24 @@ class Calculator(QWidget):
         self.sqrt.resize(50, 50)
         self.sqrt.move(170, 265)
 
+        self.proc = QPushButton('%', self)  # %
+        self.proc.resize(50, 50)
+        self.proc.move(5, 320)
+
+        self.dell2 = QPushButton('//', self)  # //
+        self.dell2.resize(50, 50)
+        self.dell2.move(60, 320)
+
+        self.qvad = QPushButton('x2', self)  # x2
+        self.qvad.resize(50, 50)
+        self.qvad.move(115, 320)
+
         self.ravn = QPushButton('=', self)
-        self.ravn.resize(155, 50)
-        self.ravn.move(5, 320)
+        self.ravn.resize(160, 50)
+        self.ravn.move(5, 370)
 
         self.c = QPushButton('C', self)
-        self.c.resize(50, 50)
+        self.c.resize(50, 100)
         self.c.move(170, 320)
 
         self.num_1.clicked.connect(self.one)
@@ -108,6 +120,9 @@ class Calculator(QWidget):
         self.div.clicked.connect(self.div_1)
         self.step.clicked.connect(self.step_1)
         self.sqrt.clicked.connect(self.sqrt_1)
+        self.proc.clicked.connect(self.proc_1)  # %
+        self.dell2.clicked.connect(self.dell2_1)  # //
+        self.qvad.clicked.connect(self.qvad_1)  # x2
         self.ravn.clicked.connect(self.ravno)
         self.c.clicked.connect(self.clean)
 
@@ -186,6 +201,21 @@ class Calculator(QWidget):
         self.operand_1 = float(self.label.text())
         self.label.setText('')
 
+    def proc_1(self):
+        self.operation = '%'
+        self.operand_1 = float(self.label.text())  # %
+        self.label.setText('')
+
+    def dell2_1(self):
+        self.operation = '//'
+        self.operand_1 = float(self.label.text())  # //
+        self.label.setText('')
+
+    def qvad_1(self):
+        self.operation = 'x2'
+        self.operand_1 = float(self.label.text())  # x2
+        self.label.setText('')
+
     def ravno(self):
         self.operand_2 = float(self.label.text())
         if self.operation == '+':
@@ -204,6 +234,15 @@ class Calculator(QWidget):
 
         elif self.operation == '√':
             self.rezult = self.operand_1 ** (1 / self.operand_2)
+
+        elif self.operation == '%':
+            self.rezult = self.operand_1 / 100 * self.operand_2  # %
+
+        elif self.operation == '//':
+            self.rezult = int(self.operand_1 / self.operand_2)  # //
+
+        elif self.operation == 'x2':
+            self.rezult = math.pow(self.operand_1 or self.operand_2, 2)  # x2
 
         self.label.setText(str(self.rezult))
 
